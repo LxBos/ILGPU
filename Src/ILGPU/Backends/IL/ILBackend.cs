@@ -138,7 +138,7 @@ namespace ILGPU.Backends.IL
                 out ConstructorInfo taskConstructor,
                 out ImmutableArray<FieldInfo> taskArgumentMapping);
 
-            var kernel = Context.DefineRuntimeMethod(
+            var kernel = RuntimeSystem.Instance.DefineRuntimeMethod(
                 typeof(void),
                 CPUAcceleratorTask.ExecuteParameterTypes);
             var emitter = new ILEmitter(kernel.ILGenerator);
@@ -210,7 +210,8 @@ namespace ILGPU.Backends.IL
             out ImmutableArray<FieldInfo> taskArgumentMapping)
         {
             var acceleratorTaskType = typeof(CPUAcceleratorTask);
-            var taskBuilder = Context.DefineRuntimeClass(acceleratorTaskType);
+            var taskBuilder = RuntimeSystem.Instance.DefineRuntimeClass(
+                acceleratorTaskType);
 
             var ctor = taskBuilder.DefineConstructor(
                 MethodAttributes.Public,
