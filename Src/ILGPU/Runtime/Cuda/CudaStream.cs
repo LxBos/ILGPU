@@ -9,10 +9,10 @@
 // Source License. See LICENSE.txt for details
 // ---------------------------------------------------------------------------------------
 
-using ILGPU.Runtime.Cuda.API;
 using ILGPU.Util;
 using System;
 using System.Diagnostics.CodeAnalysis;
+using static ILGPU.Runtime.Cuda.CudaAPI;
 
 namespace ILGPU.Runtime.Cuda
 {
@@ -47,7 +47,7 @@ namespace ILGPU.Runtime.Cuda
             : base(accelerator)
         {
             CudaException.ThrowIfFailed(
-                CudaAPI.Current.CreateStream(
+                CurrentAPI.CreateStream(
                     out streamPtr,
                     StreamFlags.CU_STREAM_NON_BLOCKING));
         }
@@ -71,7 +71,7 @@ namespace ILGPU.Runtime.Cuda
             var binding = Accelerator.BindScoped();
 
             CudaException.ThrowIfFailed(
-                CudaAPI.Current.SynchronizeStream(streamPtr));
+                CurrentAPI.SynchronizeStream(streamPtr));
 
             binding.Recover();
         }
@@ -86,7 +86,7 @@ namespace ILGPU.Runtime.Cuda
             if (streamPtr != IntPtr.Zero)
             {
                 CudaException.ThrowIfFailed(
-                    CudaAPI.Current.DestroyStream(streamPtr));
+                    CurrentAPI.DestroyStream(streamPtr));
                 streamPtr = IntPtr.Zero;
             }
             base.Dispose(disposing);
